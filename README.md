@@ -1,8 +1,7 @@
 # logo2gcode
-Inspired by https://github.com/rcpedersen/snap-to-gcode
-A tool to convert LOGO script to CNC gcode
-
-You can use http://inexorabletash.github.io/jslogo/ to write and verify LOGO turtle drawing.
+A tool to convert LOGO script to CNC gcode. <br>
+Inspired by https://github.com/rcpedersen/snap-to-gcode. <br>
+You can use http://inexorabletash.github.io/jslogo/ to write and verify LOGO turtle drawing. <br>
 
 
 Command line usage:
