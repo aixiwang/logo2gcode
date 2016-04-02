@@ -1,0 +1,17 @@
+penup
+sety 100
+seth -90
+arc 180 100
+home
+sety -100
+seth 90
+arc 180 100
+setxy 100 100
+pendown
+setxy 100 -100
+penup
+setxy -100 100
+pendown
+setxy -100 -100
+penup
+home
