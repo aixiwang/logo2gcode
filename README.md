@@ -2,6 +2,14 @@
 Inspired by https://github.com/rcpedersen/snap-to-gcode
 A tool to convert LOGO script to CNC gcode
 
+You can use http://inexorabletash.github.io/jslogo/ to write and verify LOGO turtle drawing.
+
+
+Command line usage:
+<pre><code>
+python logo2gcode logo_file gcode_file up_height down_height arc_min_len ratio
+</code></pre>
+
 Sample LOGO code:
 <pre><code>
 penup
@@ -24,9 +32,11 @@ home
 
 </code></pre>
 
-Command to convert LOGO to gcode:
+Command:
 <pre><code>
 python logo2gcode.py logo.txt gc.txt 5 -5 3 2
+
+The last parameter is used to scale size to double size.
 </code></pre>
 
 
