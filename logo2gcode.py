@@ -8,6 +8,9 @@
 # v0.1
 # * added ratio parameter support
 # * supported logo commands:home,cs,lt,rt,fd,bk,setx,sety,setxy,arc
+# v0.2 
+# * fixed incorrect Z axis generating in scaling mode
+
 #----------------------------------------------------------------------
 
 import math
@@ -56,7 +59,7 @@ class logo2gcode():
             gcode += "Y%.3f " % (y * self.ratio)
             self.y = y
         if self.z != z:
-            gcode += "Z%.3f " % (z * self.ratio)
+            gcode += "Z%.3f " % (z)
             self.z = z
         gcode += "\r\n"
         
@@ -82,14 +85,15 @@ class logo2gcode():
         self.setxy(new_x, new_y)
 
     def arc(self, angle, r):
+        print('arc angle=%f,r=%f' %(angle,r))
         old_pen_down = self.is_pen_down
         old_x = self.x
         old_y = self.y
 
         start_angle = self.heading
-        end_angle = angle%360 + start_angle
+        end_angle = angle + start_angle
         
-        if start_angle == end_angle:
+        if start_angle == angle:
             return
         
         self.up()
@@ -102,10 +106,9 @@ class logo2gcode():
             new_y = old_y + r * math.cos(math.radians(start_angle%360))
             t1 = math.sin(math.radians(start_angle%360))
             t2 = math.cos(math.radians(start_angle%360))
-            #print('self.x=%f,self.y=%f,new_x=%f,new_y=%f,r=%f,t1=%f,t2=%f' % (self.x,self.y,new_x,new_y,r,t1,t2))
-            
+            #print('self.x=%f,self.y=%f,new_x=%f,new_y=%f,r=%f,t1=%f,t2=%f' % (self.x,self.y,new_x,new_y,r,t1,t2)) 
             self.setxy(new_x, new_y)
-            start_angle += (float(self.arc_min_lenth)/r)/(2*3.1415926)*360
+            start_angle += (float(self.arc_min_lenth* self.ratio)/r)/(2*3.1415926)*360
             #print('start_angle:' + str(start_angle))
 
         self.up()
@@ -158,29 +161,29 @@ class logo2gcode():
     #----------------------------------------------------------------
     def translate(self, lines):
         for line in lines:
-            #print('line:',line)
+            print('line:',line)
             line = line.strip()
             line = line.lower()
             line2 = line.split(' ')
 
             if line2[0] == 'fd' or line2[0] == 'forward':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.forward(f)
 
             elif line2[0] == 'bk' or line2[0] == 'backward':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.backward(f)
 
             elif line2[0] == 'left' or line2[0] == 'lt':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.left(f)
 
             elif line2[0] == 'right' or line2[0] == 'rt':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.right(f)
 
             elif line2[0] == 'setheading' or line2[0] == 'seth':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.set_heading(f)
 
             elif line2[0] == 'cs' or line2[0] == 'cleanscreen' or line2[0] == 'home':
@@ -194,21 +197,21 @@ class logo2gcode():
                 self.penup()
 
             elif line2[0] == 'setx':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.setx(f)
 
             elif line2[0] == 'sety':
-                f = float(line2[1])
+                f = float(line2[1].strip())
                 self.sety(f)
 
             elif line2[0] == 'setxy':
-                f1 = float(line2[1])
-                f2 = float(line2[2])                
+                f1 = float(line2[1].strip())
+                f2 = float(line2[2].strip())                
                 self.setxy(f1,f2)
 
             elif line2[0] == 'arc':
-                f1 = float(line2[1])
-                f2 = float(line2[2])                
+                f1 = float(line2[1].strip())
+                f2 = float(line2[2].strip())                
                 self.arc(f1,f2)
 
             else:
